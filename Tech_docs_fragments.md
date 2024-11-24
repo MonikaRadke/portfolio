@@ -67,35 +67,55 @@ Approver Selection:
 
 ---
 #### Requisitioner Limitations
-By default, requisitioners cannot approve, inspect, or perform similar actions on their own requisitions.  
-To allow this modify the <code>approvalStepsAllowedForRequisitioner.groovy</code> script.  
+By default, requisitioners cannot approve, inspect, or perform similar actions on their own requisitions. To enable this functionality, modify the <code>approvalStepsAllowedForRequisitioner.groovy</code> script.  
 Script Location:
 - Customer-specific: <code>./customers/<customerID>/workflow</code>
 - Global: <code>./global/workflow</code>
+---
+#### Frequently Asked Questions (FAQ)
+**1. Can I allow overbooking for certain purchase orders?**  
+Yes, you can enable overbooking system-wide by setting the <code>jxxtalog.purchaseOrder.allowServiceEntryOverbooking</code> attribute to <code>true</code>. For more control, define specific overbooking limits using the <code>overbookingTolerance.groovy</code> script. 
+
+**2. What are overbooking tolerance limits?**  
+Overbooking tolerance limits specify how much overbooking is allowed before the system flags an error or requires approval. These limits can be defined as:
+- Absolute value (e.g., $500 over the PO amount).
+- Relative percentage (e.g., 10% over the PO amount).  
+
+**3. Where do I configure overbooking tolerance limits?**  
+Use the <code>overbookingTolerance.groovy</code> script located in:
+- <code>./customers/<customerID>/serviceEntry</code> (for customer-specific limits)
+- <code>./global/serviceEntry</code> (for global limits)   
+
+**4. Who approves overbooking cases?**  
+The system selects approvers based on responsibility parameters, such as authority level, cost object, and approval limits. Only the first eligible user in the list can approve. If no eligible user is found, the default approver (role: <code>ProcDefaultApprover</code>) is assigned.  
+
+**5. What happens if no approver is found?**  
+If no approvers are identified, the SES remains in the "released" status and does not proceed to "submitted."  
+
+**6. Can a requisitioner approve their own overbooking request?**  
+By default, requisitioners are restricted from approving their own requests. This restriction can be lifted by modifying the <code>approvalStepsAllowedForRequisitioner.groovy</code> script.  
+
+**7. What should I do if the system prevents overbooking but I need flexibility?**  
+You can:
+- Enable overbooking globally by setting <code>jcatalog.purchaseOrder.allowServiceEntryOverbooking</code> to <code>true</code>.  
+- Define specific tolerances using the <code>overbookingTolerance.groovy</code> script.  
+
+**8. Can overbooking tolerances differ by customer or product type?**  
+Yes, tolerances can be customized by customer, product, supplier, or classification group within the <code>overbookingTolerance.groovy</code> script.  
+
+**9. How is the overbooking approval process related to currency?**  
+The system ensures that the approver’s responsibility currency matches the purchase order’s currency. If there’s a mismatch, the approver will not be eligible.  
+
+**10. Can I add additional steps for overbooking approval?**  
+Yes, modify the <code>approvalStepsAllowedForRequisitioner.groovy</code> script to define additional workflow steps globally or for specific customers.
 
 
 
 
 
 
-__________________________
-**Accounting Details**  
-In this section, you can allocate costs across different cost objects and apply them to the entire purchase order. By default, the system prioritizes accounting details for the entire purchase order (if available). To override this and prioritize accounting details for individual items, set the configuration attribute jcataxxostObjects (boolean) to true (default is false).
-___________________________
-**Attachments**  
-Attachments
-You can attach documents to the purchase order by either dragging and dropping files or clicking the area labeled 'Drop xls, xlsx, doc, docx, pdf files here' to browse and upload the required files.
 
-- To make an attachment visible to the supplier, select the Available for Suppliers checkbox below the file name.
-- To delete an attachment, click the bin icon next to the file name.  
 
-Note: If you attach a file but do not select the Available for Suppliers checkbox, the attachment is treated as an internal note. It will not impact the purchase order, and no changes will occur when you release the edited purchase order.
-___________________________
-**Available Actions**  
-- Back: Located at the top left of the section, this button returns you to the previous screen.
-- Release: Found at the top right of the section, this button applies and releases changes to the purchase order. You will be prompted to select a reason for the changes from a drop-down menu in a pop-up window, where you can also leave an optional comment. The list of reasons for purchase order changes is configured in the <code>poxxons.groovy</code> script under the XX Configuration Area.
-- Prevent Sending to the Supplier: To prevent the edited purchase order from being sent to the supplier, select this checkbox.
-Note: Access to this checkbox requires the <code>/purchxxanageSendToSupplier</code> permission, which can be assigned using the PROV Permission Editor.
 
 
 
