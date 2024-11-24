@@ -1,9 +1,7 @@
 ## Table of Contents 
 1. User Manual (Fragment) 
 
-2. Functional Requirements 
-
-3. Text Localization Tool
+2. Text Localization Tool (Fragment)
 
 ### 1. User Manual (Fragment): SES Overbooking Overview
 **What is SES Overbooking?**  
@@ -108,6 +106,38 @@ Yes, tolerances can be customized by customer, product, supplier, or classificat
 **9. Can I add additional steps for overbooking approval?**  
 
 Yes, modify the <code>approvalStepsAllowedForRequisitioner.groovy</code> script to define additional workflow steps globally or for specific customers.
+
+---
+
+### 2. Text Localization Tool (Fragment):
+
+#### Overview
+
+Text localization is the process of adapting content to meet the linguistic and cultural preferences of a specific locale. The **Text Localization Tool (TLT)** facilitates this process by enabling efficient management of translations and message updates across applications. With TLT, you can:
+
+- Handle newly added messages.
+- Modify existing messages.
+- Add and edit translations for existing languages.
+- Introduce new languages.
+- Generate reports.
+- Import and export translations.
+
+#### Glossary
+
+- TLT: Text Localization Tool.
+- Default Language: The default language is English (en).
+- Source Message Bundle (SoMB): The default messages used in Grails applications. These files (en.js) are located in <code>${xx}/reaxxules/${reaxxdule}/src/comxxents/${component}/i18n/en.js.</code> SoMB contains default messages (and Translation Keys) that appear on the UI when translations for a specific language are unavailable. Applications send the SoMB to TLT.
+- Standard Message Bundle (SMB): Language-specific property files exported from TLT as a zip. These files contain translations for all supported languages and are stored in a separate repository (link). SMBs are included during application installation or runtime.
+- Modified Message Bundle (MMB): Messages edited via TLT that differ from SMB. MMB overwrites SMB.
+- Active Message Bundle (AMB): The final bundle sent back to applications, containing the combined SMB and MMB:
+<code>SMB + MMB = AMB (MMB ≥ SMB)</code>
+- Translation Key: A unique identifier for a message, following a specific naming convention.
+- Dispute Tab: A section in TLT where newly added messages and conflicting messages (refer to Dispute Statuses) are displayed.
+- Dispute Statuses: Automatically assigned by TLT:  
+  - CONFLICT: Occurs when there is a mismatch among the Source Message (So), Standard Message (St), or English Translation (T). The conflict is resolved when all three values are equal:  
+Conflict: <code>So ≠ St ∨ So ≠ T ∨ St ≠ T</code>
+Resolution: <code>So = St = T</code>
+  - NEW: Identifies new messages with only the Source Message and Translation Key provided.
 
 
 
